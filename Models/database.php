@@ -29,48 +29,7 @@ class db
                 AUTH (works for customers or staff)
     ================================================== */
 
-    function signup($connection, $tablename, $username, $password)
-    {
-        $username = $connection->real_escape_string($username);
-        $password = $connection->real_escape_string($password);
-        $date     = date("Y-m-d H:i:s");
-
-        $sql = "INSERT INTO " . $tablename . " (Username, Password, CreatedAt)
-                VALUES ('" . $username . "', '" . $password . "', '" . $date . "')";
-
-        $result = $connection->query($sql);
-
-        return $result;
-    }
-
-
-    function signin($connection, $tablename, $username, $password)
-    {
-        $username = $connection->real_escape_string($username);
-        $password = $connection->real_escape_string($password);
-
-        $sql = "SELECT * FROM " . $tablename . "
-                WHERE Username = '" . $username . "'
-                AND Password = '" . $password . "'";
-
-        $result = $connection->query($sql);
-
-        return $result;
-    }
-
-
-    function usernameExists($connection, $tablename, $username)
-    {
-        $username = $connection->real_escape_string($username);
-
-        $sql = "SELECT * FROM " . $tablename . "
-                WHERE Username = '" . $username . "'";
-
-        $result = $connection->query($sql);
-
-        return $result->num_rows > 0;
-    }
-
+    
 
     /* ==================================================
                         PRODUCTS
