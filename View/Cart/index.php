@@ -42,7 +42,7 @@ else
 ?>
 
 
-<form action="cart.php" method="POST">
+<form action="index.php?page=cart" method="POST">
 
 <div class="cart-container">
 
@@ -66,8 +66,6 @@ else
             <br>
             <input type="text" name="phone" required>
             <br><br>
-
-            
 
             <label>Division</label>
             <br>
@@ -98,23 +96,25 @@ else
             <br>
 
             <label>
-                            <input
-                type="radio"
-                name="delivery_area"
-                value="Inside Dhaka"
-                required
-            >
-            Inside Dhaka (80 Tk)
+                <input
+                    type="radio"
+                    name="delivery"
+                    value="80"
+                    onclick="calculateGrandTotal()"
+                    required
+                >
+                Inside Dhaka (80 Tk)
             </label>
             <br><br>
 
             <label>
-                        <input
-                type="radio"
-                name="delivery_area"
-                value="Outside Dhaka"
-            >
-            Outside Dhaka (130 Tk)
+                <input
+                    type="radio"
+                    name="delivery"
+                    value="130"
+                    onclick="calculateGrandTotal()"
+                >
+                Outside Dhaka (130 Tk)
             </label>
 
     </div>
@@ -165,7 +165,7 @@ else
                         <div class="cart-quantity">
 
                             <a
-                                href="cart.php?decrease=<?php echo $item['Index']; ?>"
+                                href="index.php?page=cart&decrease=<?php echo $item['Index']; ?>"
                                 class="qty-btn"
                             >
                                 -
@@ -178,7 +178,7 @@ else
                             </span>
 
                             <a
-                                href="cart.php?increase=<?php echo $item['Index']; ?>"
+                                href="index.php?page=cart&increase=<?php echo $item['Index']; ?>"
                                 class="qty-btn"
                             >
                                 +
@@ -192,7 +192,7 @@ else
                         </p>
 
                         <a
-                            href="cart.php?remove=<?php echo $item['Index']; ?>"
+                            href="index.php?page=cart&remove=<?php echo $item['Index']; ?>"
                             class="remove-btn"
                         >
                             Remove Item

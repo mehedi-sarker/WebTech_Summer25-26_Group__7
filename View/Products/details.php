@@ -56,7 +56,7 @@ else
     <div class="info-section">
 
 
-        <form action="cart.php" method="POST">
+        <form action="index.php?page=cart" method="POST">
 
             <input
                 type="hidden"

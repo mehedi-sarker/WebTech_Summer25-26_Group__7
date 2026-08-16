@@ -1,58 +1,10 @@
 <?php
 
-require_once __DIR__ . "/../Config/Connection.php";
-require_once __DIR__ . "/../Models/Product.php";
-require_once __DIR__ . "/../Models/Order.php";
+require_once __DIR__ . "/../Models/database.php";
 
 
 class CartController
 {
-    private $product;
-    private $order;
-
-    public function view()
-{
-    $cartItems = array();
-
-    if (isset($_SESSION['cart']))
-    {
-        foreach ($_SESSION['cart'] as $index => $item)
-        {
-            $result =
-                $this->product->getProductById(
-                    $item['ProductID']
-                );
-
-            $row = mysqli_fetch_assoc($result);
-
-            if ($row)
-            {
-                $row['Size'] =
-                    $item['Size'];
-
-                $row['Quantity'] =
-                    $item['Quantity'];
-
-                $row['Index'] =
-                    $index;
-
-                $cartItems[] =
-                    $row;
-            }
-        }
-    }
-
-    require __DIR__ .
-            "/../View/Cart/index.php";
-}
-    public function __construct()
-    {
-        global $conn;
-
-        $this->product = new Product($conn);
-        $this->order   = new Order($conn);
-    }
-
 
     /* =========================
             ADD TO CART
@@ -76,7 +28,7 @@ class CartController
             $_SESSION['cart'][] = $item;
         }
 
-        header("Location: cart.php");
+        header("Location: index.php?page=cart");
         exit();
     }
 
@@ -94,7 +46,7 @@ class CartController
             $_SESSION['cart'][$index]['Quantity']++;
         }
 
-        header("Location: cart.php");
+        header("Location: index.php?page=cart");
         exit();
     }
 
@@ -112,7 +64,7 @@ class CartController
             $_SESSION['cart'][$index]['Quantity']--;
         }
 
-        header("Location: cart.php");
+        header("Location: index.php?page=cart");
         exit();
     }
 
@@ -132,7 +84,7 @@ class CartController
             $_SESSION['cart'] = array_values($_SESSION['cart']);
         }
 
-        header("Location: cart.php");
+        header("Location: index.php?page=cart");
         exit();
     }
 
@@ -140,191 +92,118 @@ class CartController
     /* =========================
               CHECKOUT
     ========================= */
-/*========================================
-              CHECKOUT
-========================================*/
 
-public function checkout()
-{
-    if (empty($_SESSION['cart']))
+    public function checkout()
     {
-        header("Location: cart.php");
+        if (empty($_SESSION['cart']))
+        {
+            header("Location: index.php?page=cart");
+            exit();
+        }
+
+        $database   = new db();
+        $connection = $database->connection();
+
+        $subtotal = 0;
+
+        foreach ($_SESSION['cart'] as $item)
+        {
+            $result = $database->getProductById($connection, $item['ProductID']);
+
+            $row = $result->fetch_assoc();
+
+            if ($row)
+            {
+                $subtotal += $row['Price'] * $item['Quantity'];
+            }
+        }
+
+        $deliveryCharge = intval($_POST['delivery']);
+
+        $deliveryArea = ($deliveryCharge == 130) ? "Outside Dhaka" : "Inside Dhaka";
+
+        $billingAddress =
+            $_POST['address'] . ", " .
+            $_POST['area'] . ", " .
+            $_POST['district'] . ", " .
+            $_POST['division'];
+
+        if (!empty($_POST['note']))
+        {
+            $billingAddress .= " (Note: " . $_POST['note'] . ")";
+        }
+
+        $data = array(
+            "customername"   => $_POST['customername'],
+            "phone"          => $_POST['phone'],
+            "billingaddress" => $billingAddress,
+            "deliveryarea"   => $deliveryArea,
+            "deliverycharge" => $deliveryCharge,
+            "producttotal"   => $subtotal
+        );
+
+        $orderId = $database->createOrder($connection, $data);
+
+        foreach ($_SESSION['cart'] as $item)
+        {
+            $result = $database->getProductById($connection, $item['ProductID']);
+
+            $row = $result->fetch_assoc();
+
+            if ($row)
+            {
+                $database->addOrderItem(
+                    $connection,
+                    $orderId,
+                    $item['ProductID'],
+                    $item['Quantity'],
+                    $row['Price']
+                );
+
+                $database->reduceStock($connection, $item['ProductID'], $item['Quantity']);
+            }
+        }
+
+        unset($_SESSION['cart']);
+
+        header("Location: index.php?page=ordersuccess&order=" . $orderId);
         exit();
     }
 
 
-    /*====================================
-          CUSTOMER INFORMATION
-    ====================================*/
+    /* =========================
+            VIEW CART
+    ========================= */
 
-    $customername = $_POST['customername'] ?? "";
-
-    $phone = $_POST['phone'] ?? "";
-
-    $division = $_POST['division'] ?? "";
-
-    $district = $_POST['district'] ?? "";
-
-    $area = $_POST['area'] ?? "";
-
-    $address = $_POST['address'] ?? "";
-
-    $deliveryArea = $_POST['delivery_area'] ?? "";
-
-
-    /*====================================
-          CREATE BILLING ADDRESS
-    ====================================*/
-
-    $billingAddress =
-        "Division: " . $division .
-        ", District: " . $district .
-        ", Area: " . $area .
-        ", Address: " . $address;
-
-
-    /*====================================
-          DELIVERY CHARGE
-    ====================================*/
-
-    if ($deliveryArea == "Inside Dhaka")
+    public function view()
     {
-        $deliveryCharge = 80;
-    }
-    elseif ($deliveryArea == "Outside Dhaka")
-    {
-        $deliveryCharge = 130;
-    }
-    else
-    {
-        $deliveryCharge = 0;
-    }
+        $database   = new db();
+        $connection = $database->connection();
 
+        $cartItems = array();
 
-    /*====================================
-              CALCULATE PRODUCT TOTAL
-    ====================================*/
-
-    $productTotal = 0;
-
-
-    foreach ($_SESSION['cart'] as $item)
-    {
-        $result =
-            $this->product->getProductById(
-                $item['ProductID']
-            );
-
-
-        $row = mysqli_fetch_assoc($result);
-
-
-        if ($row)
+        if (isset($_SESSION['cart']))
         {
-            $productTotal +=
-                $row['Price'] * $item['Quantity'];
-        }
-    }
+            foreach ($_SESSION['cart'] as $index => $item)
+            {
+                $result = $database->getProductById($connection, $item['ProductID']);
 
+                $row = $result->fetch_assoc();
 
-    /*====================================
-              ORDER DATA
-    ====================================*/
+                if ($row)
+                {
+                    $row['Size']     = $item['Size'];
+                    $row['Quantity'] = $item['Quantity'];
+                    $row['Index']    = $index;
 
-    $data = array(
-
-        "customername"   => $customername,
-
-        "phone"          => $phone,
-
-        "billingAddress" => $billingAddress,
-
-        "deliveryArea"   => $deliveryArea,
-
-        "deliveryCharge" => $deliveryCharge,
-
-        "productTotal"   => $productTotal
-
-    );
-
-
-    /*====================================
-              CREATE ORDER
-    ====================================*/
-
-    $orderId =
-        $this->order->createOrder($data);
-
-
-    /*====================================
-              CREATE ORDER ITEMS
-    ====================================*/
-
-    foreach ($_SESSION['cart'] as $item)
-    {
-
-        $productId =
-            $item['ProductID'];
-
-        $quantity =
-            $item['Quantity'];
-
-
-        $result =
-            $this->product->getProductById(
-                $productId
-            );
-
-
-        $row =
-            mysqli_fetch_assoc($result);
-
-
-        if ($row)
-        {
-
-            $unitPrice =
-                $row['Price'];
-
-
-            $this->order->addOrderItem(
-                $orderId,
-                $productId,
-                $quantity,
-                $unitPrice
-            );
-
-
-            /*
-            Reduce stock
-            */
-
-            $this->product->reduceStock(
-                $productId,
-                $quantity
-            );
-
+                    $cartItems[] = $row;
+                }
+            }
         }
 
+        require __DIR__ . "/../View/Cart/index.php";
     }
 
+}
 
-    /*====================================
-              CLEAR CART
-    ====================================*/
-
-    unset($_SESSION['cart']);
-
-
-    /*====================================
-              SUCCESS PAGE
-    ====================================*/
-
-    header(
-        "Location: ordersuccess.php?order=" .
-        $orderId
-    );
-
-    exit();
-}}
 ?>

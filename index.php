@@ -1,83 +1,195 @@
 <?php
 
-require_once "Config/Connection.php";
-require_once "Models/Product.php";
+session_start();
+
 require_once "Controller/ProductController.php";
-
-$controller = new ProductController();
-
-$products = $controller->latestProducts();
-
-?>
-
-<!DOCTYPE html>
-
-<html>
-
-<head>
-
-    <title>Golazo Kits BD</title>
-
-    <link rel="stylesheet" href="View/Design/design.css">
-
-</head>
-
-<body>
-
-<?php include "View/Layout/header.php"; ?>
+require_once "Controller/CartController.php";
+require_once "Controller/AuthController.php";
 
 
-<h2 align="center">
-    Latest Jerseys
-</h2>
+/* ==============================================
+        FIGURE OUT WHICH PAGE TO SHOW
+   ============================================== */
+
+$page = isset($_GET['page']) ? $_GET['page'] : 'home';
 
 
-<div class="product-container">
-
-<?php
-
-while($row = mysqli_fetch_assoc($products))
+switch ($page)
 {
 
-?>
+    /* ---------- HOME ---------- */
 
-    <div class="card">
+    case 'home':
 
-        <img src="<?php echo $row['Image']; ?>">
+        $productController = new ProductController();
 
-        <h3>
-            <?php echo $row['ProductName']; ?>
-        </h3>
+        $products = $productController->latestProducts();
 
-        <p>
-            <?php echo $row['Edition']; ?> Edition
-        </p>
+        require "View/Home/index.php";
 
-        <p>
-            <?php echo $row['Price']; ?> Tk
-        </p>
+        break;
 
-        <a href="productdetails.php?id=<?php echo $row['ProductID']; ?>">
 
-            <button>
-                View Details
-            </button>
+    /* ---------- PRODUCTS LIST / SEARCH ---------- */
 
-        </a>
+    case 'products':
 
-    </div>
+        $productController = new ProductController();
 
-<?php
+        $productController->index();
+
+        break;
+
+
+    /* ---------- PRODUCT DETAILS ---------- */
+
+    case 'productdetails':
+
+        $productController = new ProductController();
+
+        $productController->details($_GET['id']);
+
+        break;
+
+
+    /* ---------- ABOUT US ---------- */
+
+    case 'about':
+
+        require "View/About/index.php";
+
+        break;
+
+
+    /* ---------- CART / CHECKOUT ---------- */
+
+    case 'cart':
+
+        $cartController = new CartController();
+
+        if (isset($_POST['addcart']))
+        {
+            $cartController->add();
+        }
+        elseif (isset($_POST['checkout']))
+        {
+            $cartController->checkout();
+        }
+        elseif (isset($_GET['increase']))
+        {
+            $cartController->increase($_GET['increase']);
+        }
+        elseif (isset($_GET['decrease']))
+        {
+            $cartController->decrease($_GET['decrease']);
+        }
+        elseif (isset($_GET['remove']))
+        {
+            $cartController->remove($_GET['remove']);
+        }
+        else
+        {
+            $cartController->view();
+        }
+
+        break;
+
+
+    /* ---------- LOGIN ---------- */
+
+    case 'login':
+
+        $authController = new AuthController();
+
+        if (isset($_POST['login']))
+        {
+            $authController->login();
+        }
+        else
+        {
+            $authController->showLogin();
+        }
+
+        break;
+
+
+    /* ---------- SIGNUP ---------- */
+
+    case 'signup':
+
+        $authController = new AuthController();
+
+        if (isset($_POST['signup']))
+        {
+            $authController->signup();
+        }
+        else
+        {
+            $authController->showSignup();
+        }
+
+        break;
+
+
+    /* ---------- LOGOUT ---------- */
+
+    case 'logout':
+
+        $authController = new AuthController();
+
+        $authController->logout();
+
+        break;
+
+
+    /* ---------- ADMIN DASHBOARD ---------- */
+
+    case 'admin-dashboard':
+
+        if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'admin')
+        {
+            header("Location: index.php?page=login");
+            exit();
+        }
+
+        require "View/Admin/dashboard.php";
+
+        break;
+
+
+    /* ---------- DELIVERY DASHBOARD ---------- */
+
+    case 'delivery-dashboard':
+
+        if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'deliveryman')
+        {
+            header("Location: index.php?page=login");
+            exit();
+        }
+
+        require "View/Delivery/dashboard.php";
+
+        break;
+
+
+    /* ---------- ORDER SUCCESS ---------- */
+
+    case 'ordersuccess':
+
+        $orderId = isset($_GET['order']) ? intval($_GET['order']) : null;
+
+        require "View/Order/success.php";
+
+        break;
+
+
+    /* ---------- UNKNOWN PAGE ---------- */
+
+    default:
+
+        header("Location: index.php");
+        exit();
 
 }
 
 ?>
-
-</div>
-
-
-<?php include "View/Layout/footer.php"; ?>
-
-</body>
-
-</html>

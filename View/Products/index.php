@@ -27,13 +27,13 @@ include __DIR__ . "/../Layout/header.php";
 
 <?php
 
-if (mysqli_num_rows($products) == 0)
+if ($products->num_rows == 0)
 {
     echo "<h2>No Products Found</h2>";
 }
 
 
-while ($row = mysqli_fetch_assoc($products))
+while ($row = $products->fetch_assoc())
 {
 
 ?>
@@ -74,7 +74,7 @@ while ($row = mysqli_fetch_assoc($products))
 
 
         <a
-            href="productdetails.php?id=<?php echo $row['ProductID']; ?>"
+            href="index.php?page=productdetails&id=<?php echo $row['ProductID']; ?>"
         >
 
             <button>

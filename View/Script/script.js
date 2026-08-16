@@ -1,20 +1,23 @@
-var quantity = 1;
-
-
 /*==========================================
-          PRODUCT DETAILS PAGE
+            PRODUCT DETAILS
 ==========================================*/
+
+// Product price comes from productdetails.php
+// Example:
+// <script>
+// var price = 2200;
+// </script>
+
+var quantity = 1;
 
 function increaseQuantity()
 {
     quantity++;
 
-    document.getElementById("quantity").value =
-        quantity;
+    document.getElementById("quantity").value = quantity;
 
     calculateTotal();
 }
-
 
 function decreaseQuantity()
 {
@@ -22,23 +25,18 @@ function decreaseQuantity()
     {
         quantity--;
 
-        document.getElementById("quantity").value =
-            quantity;
+        document.getElementById("quantity").value = quantity;
 
         calculateTotal();
     }
 }
 
-
 function calculateTotal()
 {
-    var total =
-        price * quantity;
+    var total = price * quantity;
 
-    document.getElementById("totalPrice").innerHTML =
-        total;
+    document.getElementById("totalPrice").innerHTML = total;
 }
-
 
 /*==========================================
                 CART PAGE
@@ -46,80 +44,51 @@ function calculateTotal()
 
 function calculateGrandTotal()
 {
+
     var delivery = 0;
 
+    var inside = document.querySelector('input[name="delivery"][value="80"]');
 
-    var inside =
-        document.querySelector(
-            'input[name="delivery_area"][value="Inside Dhaka"]'
-        );
+    var outside = document.querySelector('input[name="delivery"][value="130"]');
 
-
-    var outside =
-        document.querySelector(
-            'input[name="delivery_area"][value="Outside Dhaka"]'
-        );
-
-
-    if(inside && inside.checked)
+    if(inside.checked)
     {
         delivery = 80;
     }
 
-
-    else if(outside && outside.checked)
+    else if(outside.checked)
     {
         delivery = 130;
     }
 
+    document.getElementById("deliveryCharge").innerHTML = delivery;
 
-    document.getElementById("deliveryCharge").innerHTML =
-        delivery;
+    var grandTotal = subtotal + delivery;
 
+    document.getElementById("grandTotal").innerHTML = grandTotal;
 
-    var grandTotal =
-        subtotal + delivery;
-
-
-    document.getElementById("grandTotal").innerHTML =
-        grandTotal;
 }
 
 
 /*==========================================
-                PAGE LOAD
+        PAGE LOAD
 ==========================================*/
 
 window.onload = function()
 {
 
-    var inside =
-        document.querySelector(
-            'input[name="delivery_area"][value="Inside Dhaka"]'
-        );
+    var inside = document.querySelector('input[name="delivery"][value="80"]');
 
-
-    var outside =
-        document.querySelector(
-            'input[name="delivery_area"][value="Outside Dhaka"]'
-        );
-
+    var outside = document.querySelector('input[name="delivery"][value="130"]');
 
     if(inside)
     {
-        inside.addEventListener(
-            "change",
-            calculateGrandTotal
-        );
+        inside.addEventListener("change", calculateGrandTotal);
     }
-
 
     if(outside)
     {
-        outside.addEventListener(
-            "change",
-            calculateGrandTotal
-        );
+        outside.addEventListener("change", calculateGrandTotal);
     }
 
-};
+}

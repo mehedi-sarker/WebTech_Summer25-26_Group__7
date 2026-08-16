@@ -1,22 +1,10 @@
 <?php
 
-require_once __DIR__ . "/../Config/Connection.php";
-
-require_once __DIR__ . "/../Models/Product.php";
+require_once __DIR__ . "/../Models/database.php";
 
 
 class ProductController
 {
-    private $product;
-
-
-    public function __construct()
-    {
-        global $conn;
-
-        $this->product = new Product($conn);
-    }
-
 
     /* =========================
           PRODUCTS PAGE
@@ -24,19 +12,17 @@ class ProductController
 
     public function index()
     {
+        $database   = new db();
+        $connection = $database->connection();
+
         if (isset($_GET['search']) && $_GET['search'] != "")
         {
-            $search = $_GET['search'];
-
-            $products =
-                $this->product->searchProducts($search);
+            $products = $database->searchProducts($connection, $_GET['search']);
         }
         else
         {
-            $products =
-                $this->product->getAllProducts();
+            $products = $database->getAllProducts($connection);
         }
-
 
         require __DIR__ . "/../View/Products/index.php";
     }
@@ -48,7 +34,10 @@ class ProductController
 
     public function latestProducts()
     {
-        return $this->product->getLatestProducts();
+        $database   = new db();
+        $connection = $database->connection();
+
+        return $database->getLatestProducts($connection);
     }
 
 
@@ -58,13 +47,16 @@ class ProductController
 
     public function details($id)
     {
-        $result =
-            $this->product->getProductById($id);
+        $database   = new db();
+        $connection = $database->connection();
 
-        $product = mysqli_fetch_assoc($result);
+        $result = $database->getProductById($connection, $id);
+
+        $product = $result->fetch_assoc();
 
         require __DIR__ . "/../View/Products/details.php";
     }
+
 }
 
 ?>
