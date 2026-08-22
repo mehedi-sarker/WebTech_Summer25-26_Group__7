@@ -7,6 +7,7 @@ require_once "Controller/CartController.php";
 require_once "Controller/AuthController.php";
 
 
+
 /* ==============================================
         FIGURE OUT WHICH PAGE TO SHOW
    ============================================== */
@@ -167,7 +168,8 @@ switch ($page)
             exit();
         }
 
-        require "View/Delivery/dashboard.php";
+        header("Location: View/Delivery/deliveryDashboard.php");
+        exit();
 
         break;
 

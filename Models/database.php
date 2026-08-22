@@ -28,8 +28,7 @@ class db
     /* ==================================================
                 AUTH (works for customers or staff)
     ================================================== */
-
-    
+  
 
     /* ==================================================
                         PRODUCTS
@@ -142,6 +141,31 @@ class db
         }
     }
 
+    /* ==================================================
+                    DELIVERY
+    ================================================== */
+
+    function getOrders($connection, $status)
+    {
+        $status = $connection->real_escape_string($status);
+
+        $sql = "SELECT * FROM orders WHERE Status = '" . $status . "'";
+
+        return $connection->query($sql);
+    }
+
+
+    function updateStatus($connection, $orderId, $status)
+    {
+        $orderId = intval($orderId);
+        $status  = $connection->real_escape_string($status);
+
+        $sql = "UPDATE orders SET Status = '" . $status . "' WHERE OrderID = " . $orderId;
+
+        return $connection->query($sql);
+    }
+
 }
+
 
 ?>
