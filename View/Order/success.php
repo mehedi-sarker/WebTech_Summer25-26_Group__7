@@ -1,8 +1,3 @@
-<?php
-
-$orderId = isset($_GET['order']) ? intval($_GET['order']) : null;
-
-?>
 <!DOCTYPE html>
 
 <html>
@@ -20,7 +15,7 @@ $orderId = isset($_GET['order']) ? intval($_GET['order']) : null;
 <body>
 
 
-<?php include "View/Layout/header.php"; ?>
+<?php include __DIR__ . "/../Layout/header.php"; ?>
 
 
 <div class="order-success-container">
@@ -35,14 +30,14 @@ $orderId = isset($_GET['order']) ? intval($_GET['order']) : null;
 
     <p>We've received your order and will contact you shortly to confirm delivery.</p>
 
-    <a href="products.php" class="checkout-btn" style="display:inline-block; text-decoration:none; width:auto; padding:12px 30px;">
+    <a href="index.php?page=products" class="checkout-btn" style="display:inline-block; text-decoration:none; width:auto; padding:12px 30px;">
         Continue Shopping
     </a>
 
 </div>
 
 
-<?php include "View/Layout/footer.php"; ?>
+<?php include __DIR__ . "/../Layout/footer.php"; ?>
 
 
 </body>

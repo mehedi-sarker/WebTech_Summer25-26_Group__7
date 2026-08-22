@@ -1,9 +1,0 @@
-<?php
-
-require_once "Controller/ProductController.php";
-
-$controller = new ProductController();
-
-$controller->details($_GET['id']);
-
-?>
