@@ -4,7 +4,7 @@
     <head>
         <title> Delivery Dashboard </title>
         <link rel="stylesheet" href="../Design/design.css">
-        <link rel="stylesheet" href="delivery.css">
+        <link rel="stylesheet" href="../Design/delivery.css">
         <script>
             function confirm_update()
             {
