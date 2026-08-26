@@ -147,22 +147,16 @@ class db
 
     function getOrders($connection, $status)
     {
-        $status = $connection->real_escape_string($status);
-
-        $sql = "SELECT * FROM orders WHERE Status = '" . $status . "'";
-
-        return $connection->query($sql);
+        $sql = "SELECT * FROM orders WHERE Status = '".$status."'";
+        $result = $connection->query($sql);
+        return $result;
     }
-
 
     function updateStatus($connection, $orderId, $status)
     {
-        $orderId = intval($orderId);
-        $status  = $connection->real_escape_string($status);
-
-        $sql = "UPDATE orders SET Status = '" . $status . "' WHERE OrderID = " . $orderId;
-
-        return $connection->query($sql);
+        $sql = "UPDATE orders SET Status = '".$status."' WHERE OrderID = '".$orderId."'";
+        $result = $connection->query($sql);
+        return $result;
     }
 
 }
