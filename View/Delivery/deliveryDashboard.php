@@ -5,13 +5,7 @@
         <title> Delivery Dashboard </title>
         <link rel="stylesheet" href="../Design/design.css">
         <link rel="stylesheet" href="../Design/delivery.css">
-        <script>
-            function confirm_update()
-            {
-                let ok = confirm("Update this order?");
-                return ok;
-            }
-        </script>
+        <script src="../../JS/UpdateStatus.js"></script>
     </head>
     <body>
 
@@ -23,15 +17,11 @@
             </nav>
         </header>
 
-        <div class="delivery-container">
+        <div class="delivery-wrapper">
 
-            <h2> Welcome, <?php echo $username; ?> (Delivery Man) </h2>
+            <h2> Welcome, <?php echo $username; ?> </h2>
 
-            <?php if($message != ""){ ?>
-                <p class="success-msg"><?php echo $message; ?></p>
-            <?php } ?>
-
-            <form action="" method="get" class="tab-buttons">
+            <form action="" method="post">
                 <input type="submit" name="view" value="Pending">
                 <input type="submit" name="view" value="Shipped">
                 <input type="submit" name="view" value="Delivered">
@@ -39,53 +29,34 @@
 
             <h3> Showing: <?php echo $status; ?> Orders </h3>
 
-            <table class="delivery-table">
-                <tr>
-                    <th class="col-id"> Order ID </th>
-                    <th class="col-name"> Customer Name </th>
-                    <th class="col-phone"> Phone </th>
-                    <th class="col-address"> Address </th>
-                    <th class="col-status"> Area </th>
-                    <th class="col-status"> Total (Collect) </th>
-                    <th class="col-status"> Status </th>
-                    <th class="col-action"> Action </th>
-                </tr>
+            <?php
+            if($orders->num_rows == 0){
+                echo "<p> No orders found </p>";
+            }
+            while($row = $orders->fetch_assoc()){
+            ?>
 
-                <?php
-                if(mysqli_num_rows($orders) == 0){
-                    echo "<tr><td colspan='8'> No orders found </td></tr>";
-                }
-                while($row = mysqli_fetch_assoc($orders)){
-                    $statusClass = "status-pending";
-                    if($row["Status"] == "Shipped") $statusClass = "status-shipped";
-                    if($row["Status"] == "Delivered") $statusClass = "status-delivered";
-                ?>
-                <tr>
-                    <td> <?php echo $row["OrderID"]; ?> </td>
-                    <td> <?php echo $row["CustomerName"]; ?> </td>
-                    <td> <?php echo $row["Phone"]; ?> </td>
-                    <td> <?php echo $row["BillingAddress"]; ?> </td>
-                    <td> <?php echo $row["DeliveryArea"]; ?> </td>
-                    <td> <?php echo $row["GrandTotal"]; ?> Tk </td>
-                    <td class="<?php echo $statusClass; ?>"> <?php echo $row["Status"]; ?> </td>
-                    <td>
-                        <?php if($row["Status"] == "Pending"){ ?>
-                            <form action="" method="post" onsubmit="return confirm_update()">
-                                <input type="hidden" name="order_id" value="<?php echo $row["OrderID"]; ?>">
-                                <input type="hidden" name="delivery_status" value="Shipped">
-                                <input type="submit" name="update_status" value="Mark as Shipped">
-                            </form>
-                        <?php }else if($row["Status"] == "Shipped"){ ?>
-                            <form action="" method="post" onsubmit="return confirm_update()">
-                                <input type="hidden" name="order_id" value="<?php echo $row["OrderID"]; ?>">
-                                <input type="hidden" name="delivery_status" value="Delivered">
-                                <input type="submit" name="update_status" value="Mark as Delivered">
-                            </form>
-                        <?php }else{ echo "Done"; } ?>
-                    </td>
-                </tr>
-                <?php } ?>
-            </table>
+                <div class="order-box" id="order<?php echo $row["OrderID"]; ?>">
+                    <?php
+                    echo "<p> Order ID: ".$row["OrderID"]." </p>";
+                    echo "<p> Customer Name: ".$row["CustomerName"]." </p>";
+                    echo "<p> Phone: ".$row["Phone"]." </p>";
+                    echo "<p> Address: ".$row["BillingAddress"]." </p>";
+                    echo "<p> Area: ".$row["DeliveryArea"]." </p>";
+                    echo "<p> Total to Collect: ".$row["GrandTotal"]." Tk </p>";
+                    echo "<p> Status: ".$row["Status"]." </p>";
+                    ?>
+
+                    <?php if($row["Status"] == "Pending"){ ?>
+                        <input type="button" value="Mark as Shipped" onclick="updateStatus(<?php echo $row["OrderID"]; ?>, 'Shipped')">
+                    <?php }else if($row["Status"] == "Shipped"){ ?>
+                        <input type="button" value="Mark as Delivered" onclick="updateStatus(<?php echo $row["OrderID"]; ?>, 'Delivered')">
+                    <?php }else{ ?>
+                        <p> Done </p>
+                    <?php } ?>
+                </div>
+
+            <?php } ?>
 
         </div>
 
