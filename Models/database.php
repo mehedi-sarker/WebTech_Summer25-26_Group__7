@@ -159,6 +159,25 @@ class db
         return $result;
     }
 
+    function login($connection, $name, $password)
+    {
+        $name = $connection->real_escape_string($name);
+        $password = $connection->real_escape_string($password);
+
+        $sql = "SELECT * FROM users WHERE name = '".$name."' AND password = '".$password."'";
+        $result = $connection->query($sql);
+        return $result;
+    }
+    function signup($connection, $name, $password)
+    {
+        $name = $connection->real_escape_string($name);
+        $password = $connection->real_escape_string($password);
+
+        $sql = "INSERT INTO users (name, password) VALUES ('".$name."', '".$password."')";
+        $result = $connection->query($sql);
+        return $result;
+    }
+
 }
 
 

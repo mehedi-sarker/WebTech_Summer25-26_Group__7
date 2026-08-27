@@ -1,5 +1,8 @@
 <?php
-session_start();
+require_once __DIR__ . "/../Models/database.php";
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 $name = "";
 $password = "";
@@ -43,7 +46,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 
             foreach($users as $user)
             {
-                if($user["email"] == $email && $user["password"] == $password)
+                if($user["name"] == $name && $user["password"] == $password)
                 {
                     $login_success = true;
 
@@ -56,7 +59,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
                     {
                         setcookie(
                             "remember_user",
-                            $email,
+                            $name,
                             time() + 60*60*24*7,
                             "/"
                         );

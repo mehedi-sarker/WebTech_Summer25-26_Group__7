@@ -1,5 +1,5 @@
 <?php
-include __DIR__ . "/../Models/database.php";
+require_once __DIR__ . "/../Models/database.php";
 session_start();
 
 $database = new db();

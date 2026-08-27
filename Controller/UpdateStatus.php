@@ -1,5 +1,5 @@
 <?php
-include "../Models/database.php";
+require_once __DIR__ . "/../Models/database.php";
 
 $order_id = $_POST["order_id"] ?? "";
 $status = $_POST["status"] ?? "";

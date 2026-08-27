@@ -4,7 +4,9 @@ session_start();
 
 require_once "Controller/ProductController.php";
 require_once "Controller/CartController.php";
-require_once "Controller/AuthController.php";
+require_once "Controller/loginvalidation.php";
+require_once "Controller/signupvalidation.php";
+
 
 
 
@@ -100,15 +102,15 @@ switch ($page)
 
     case 'login':
 
-        $authController = new AuthController();
+        $loginvalidation = new loginvalidation();
 
         if (isset($_POST['login']))
         {
-            $authController->login();
+            $loginvalidation->login();
         }
         else
         {
-            $authController->showLogin();
+            $loginvalidation->showLogin();
         }
 
         break;
@@ -118,15 +120,15 @@ switch ($page)
 
     case 'signup':
 
-        $authController = new AuthController();
+        $signupvalidation= new signupvalidation();
 
         if (isset($_POST['signup']))
         {
-            $authController->signup();
+            $signupvalidation->signup();
         }
         else
         {
-            $authController->showSignup();
+            $signupvalidation->showSignup();
         }
 
         break;
@@ -136,9 +138,9 @@ switch ($page)
 
     case 'logout':
 
-        $authController = new AuthController();
+        $loginvalidation = new loginvalidation();
 
-        $authController->logout();
+        $loginvalidation->logout();
 
         break;
 
