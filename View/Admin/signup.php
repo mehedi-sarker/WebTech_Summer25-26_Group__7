@@ -1,11 +1,11 @@
 <?php
-include "../Controller/signupvalidation.php";
+include "../../Controller/signupvalidation.php";
 ?>
 <!DOCTYPE html>
 <html>
     <head>
     <title>Sign UP</title>
-            <link rel="stylesheet" href="../View/signup.css">
+            <link rel="stylesheet" href="../Design/signup.css">
 
     <script>
         function collect_data()
