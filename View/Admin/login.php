@@ -1,11 +1,11 @@
 <?php
-include "../Controller/loginvalidation.php";
+include "../../Controller/loginvalidation.php";
 ?>
 <!DOCTYPE html>
 <html>
 <head>
     <title>Admin Login</title>
-    <link rel="stylesheet" href="../View/login.css">
+   <link rel="stylesheet" href="../Design/login.css">
 
     <script>
         function collect_data()
