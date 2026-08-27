@@ -4,37 +4,16 @@ include "../../Controller/loginvalidation.php";
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin Login</title>
-   <link rel="stylesheet" href="../Design/login.css">
+    <title> Login</title>
+    <link rel="stylesheet" href="../Design/login.css">
 
     <script>
         function collect_data()
         {
-            let email = document.getElementById("email").value.trim();
+            
             let password = document.getElementById("password").value.trim();
             let message = "";
             let valid = true;
-
-            if(email.length < 1)
-            {
-                message += "Email is required ";
-                valid = false;
-            }
-            else if(!email.includes("@"))
-            {
-                message += "Email must contain @ ";
-                valid = false;
-            }
-            else if(!email.includes(".com"))
-            {
-                message += "Email must contain .com ";
-                valid = false;
-            }
-            else if(email !== email.toLowerCase())
-            {
-                message += "Email must be in small letters ";
-                valid = false;
-            }
 
             if(password.length < 1)
             {
@@ -77,21 +56,21 @@ include "../../Controller/loginvalidation.php";
 
             <tr>
                 <td>
-                    <label for="email">Email:</label>
+                    <label for="name">User Name:</label>
                 </td>
 
                 <td>
                     <input
                         type="text"
-                        id="email"
-                        name="email"
-                        value="<?php echo $email; ?>"
+                        id="name"
+                        name="name"
+                        value="<?php echo $name; ?>"
                     >
                 </td>
 
                 <td>
                     <span style="color:red;">*</span>
-                    <?php echo $email; ?>
+                    <?php echo $name; ?>
                 </td>
             </tr>
 

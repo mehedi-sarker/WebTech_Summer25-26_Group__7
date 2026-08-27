@@ -1,26 +1,26 @@
 <?php
 session_start();
 
-$email = "";
+$name = "";
 $password = "";
 $message = "";
 $remember = false;
 
 if(isset($_COOKIE["remember_user"]))
 {
-    $email = $_COOKIE["remember_user"];
+    $name = $_COOKIE["remember_user"];
 }
 
 if($_SERVER["REQUEST_METHOD"] == "POST")
 {
-    $email = trim($_POST["email"] ?? "");
+    $name = trim($_POST["name"] ?? "");
     $password = trim($_POST["password"] ?? "");
 
     $remember = isset($_POST["remember"]) && $_POST["remember"] == "1";
 
     $valid = true;
 
-    if(empty($email))
+    if(empty($name))
     {
         $valid = false;
     }
@@ -77,7 +77,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 
             if(!$login_success)
             {
-                $message = "Invalid email or password!";
+                $message = "Invalid name or password!";
             }
         }
         else
