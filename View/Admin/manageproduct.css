@@ -1,0 +1,276 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f9;
+    color: #222;
+}
+
+
+/* Main Container */
+
+.product-container {
+    width: 95%;
+    max-width: 1250px;
+
+    margin: auto;
+
+    padding: 40px 20px;
+}
+
+
+/* Page Header */
+
+.page-header {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 30px;
+}
+
+.page-header h1 {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.page-header p {
+    color: #777;
+}
+
+
+/* Back Button */
+
+.back-btn {
+    text-decoration: none;
+
+    background-color: #222;
+    color: white;
+
+    padding: 11px 18px;
+
+    border-radius: 6px;
+
+    font-size: 14px;
+}
+
+.back-btn:hover {
+    background-color: #444;
+}
+
+
+/* Common Card */
+
+.product-form-card,
+.search-card,
+.product-list-card {
+    background-color: white;
+
+    border-radius: 10px;
+
+    padding: 25px;
+
+    margin-bottom: 25px;
+
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+}
+
+
+/* Add Product Heading */
+
+.product-form-card h2,
+.product-list-card h2 {
+    margin-bottom: 20px;
+
+    font-size: 22px;
+}
+
+
+/* Form Grid */
+
+.form-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 20px;
+}
+
+
+/* Form Group */
+
+.form-group {
+    display: flex;
+
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 14px;
+
+    font-weight: bold;
+
+    margin-bottom: 7px;
+}
+
+.form-group input {
+    padding: 11px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 6px;
+
+    font-size: 14px;
+
+    outline: none;
+}
+
+.form-group input:focus {
+    border-color: #555;
+}
+
+
+/* Add Button */
+
+.add-btn {
+    margin-top: 25px;
+
+    padding: 12px 22px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background-color: #222;
+
+    color: white;
+
+    font-size: 15px;
+
+    cursor: pointer;
+}
+
+.add-btn:hover {
+    background-color: #444;
+}
+
+
+/* Search */
+
+.search-card form {
+    display: flex;
+
+    gap: 10px;
+}
+
+.search-card input {
+    flex: 1;
+
+    padding: 12px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 6px;
+
+    outline: none;
+
+    font-size: 14px;
+}
+
+.search-btn {
+    padding: 12px 25px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background-color: #333;
+
+    color: white;
+
+    cursor: pointer;
+}
+
+.search-btn:hover {
+    background-color: #555;
+}
+
+
+/* Table */
+
+.table-container {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 900px;
+}
+
+thead {
+    background-color: #222;
+
+    color: white;
+}
+
+th,
+td {
+    padding: 13px 12px;
+
+    text-align: left;
+
+    border-bottom: 1px solid #ddd;
+
+    font-size: 14px;
+}
+
+tbody tr:hover {
+    background-color: #f8f8f8;
+}
+
+
+/* No Data */
+
+.no-data {
+    text-align: center;
+
+    color: #777;
+
+    padding: 30px;
+}
+
+
+/* Responsive */
+
+@media (max-width: 750px) {
+
+    .page-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .search-card form {
+        flex-direction: column;
+    }
+
+    .search-btn {
+        width: 100%;
+    }
+}

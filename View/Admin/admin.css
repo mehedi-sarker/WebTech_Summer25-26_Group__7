@@ -1,0 +1,154 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f9;
+    min-height: 100vh;
+}
+
+
+/* Main Container */
+
+.admin-container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 20px;
+}
+
+
+/* Header */
+
+.admin-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.admin-header h1 {
+    font-size: 36px;
+    color: #222;
+    margin-bottom: 10px;
+}
+
+.admin-header p {
+    font-size: 17px;
+    color: #666;
+}
+
+
+/* Admin Options */
+
+.admin-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+}
+
+
+/* Admin Card */
+
+.admin-card {
+    background-color: white;
+    text-decoration: none;
+    color: inherit;
+
+    padding: 35px 30px;
+
+    border-radius: 12px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 20px;
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+
+    transition: 0.3s;
+}
+
+.admin-card:hover {
+    transform: translateY(-5px);
+
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+
+/* Icon */
+
+.card-icon {
+    width: 70px;
+    height: 70px;
+
+    background-color: #f0f2f5;
+
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 32px;
+
+    flex-shrink: 0;
+}
+
+
+/* Card Content */
+
+.card-content {
+    flex: 1;
+}
+
+.card-content h2 {
+    font-size: 22px;
+    color: #222;
+
+    margin-bottom: 8px;
+}
+
+.card-content p {
+    font-size: 14px;
+    color: #777;
+
+    line-height: 1.5;
+}
+
+
+/* Arrow */
+
+.card-arrow {
+    font-size: 28px;
+    color: #555;
+
+    transition: 0.3s;
+}
+
+.admin-card:hover .card-arrow {
+    transform: translateX(5px);
+}
+
+
+/* Responsive */
+
+@media (max-width: 700px) {
+
+    .admin-options {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-container {
+        padding: 40px 15px;
+    }
+
+    .admin-header h1 {
+        font-size: 30px;
+    }
+
+    .admin-card {
+        padding: 25px 20px;
+    }
+}
