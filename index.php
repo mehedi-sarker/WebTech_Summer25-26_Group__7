@@ -2,10 +2,12 @@
 
 session_start();
 
-require_once "Controller/ProductController.php";
-require_once "Controller/CartController.php";
-require_once "Controller/loginvalidation.php";
-require_once "Controller/signupvalidation.php";
+require_once __DIR__ . "/Controller/loginvalidation.php";
+require_once __DIR__ . "/Controller/signupvalidation.php";
+require_once __DIR__ . "/Controller/ProductController.php";
+require_once __DIR__ . "/Controller/CartController.php";
+require_once __DIR__ . "/Controller/DeliveryController.php";
+require_once __DIR__ . "/Controller/AdminController.php";
 
 
 
@@ -155,7 +157,60 @@ switch ($page)
             exit();
         }
 
-        require "View/Admin/dashboard.php";
+        $adminController = new AdminController();
+
+        $adminController->dashboard();
+
+        break;
+
+
+    /* ---------- ADMIN - MANAGE PRODUCTS ---------- */
+
+    case 'admin-products':
+
+        if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'admin')
+        {
+            header("Location: index.php?page=login");
+            exit();
+        }
+
+        $adminController = new AdminController();
+
+        $adminController->products();
+
+        break;
+
+
+    /* ---------- ADMIN - MANAGE ORDERS ---------- */
+
+    case 'admin-orders':
+
+        if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'admin')
+        {
+            header("Location: index.php?page=login");
+            exit();
+        }
+
+        $adminController = new AdminController();
+
+        $adminController->orders();
+
+        break;
+
+
+    /* ---------- ADMIN - ORDER DETAILS ---------- */
+
+    case 'admin-order-details':
+
+        if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'admin')
+        {
+            header("Location: index.php?page=login");
+            exit();
+        }
+
+        $adminController = new AdminController();
+
+        $adminController->orderDetails($_GET['id']);
 
         break;
 

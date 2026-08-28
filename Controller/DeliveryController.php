@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . "/../Models/database.php";
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 $database = new db();
 $connection = $database->connection();

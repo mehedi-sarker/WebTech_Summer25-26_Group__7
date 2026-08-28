@@ -159,24 +159,43 @@ class db
         return $result;
     }
 
-    function login($connection, $name, $password)
+    function signup($connection, $username, $password, $role)
     {
-        $name = $connection->real_escape_string($name);
+        $username = $connection->real_escape_string($username);
+        $password = $connection->real_escape_string($password);
+        $role     = $connection->real_escape_string($role);
+
+        $sql = "INSERT INTO users (Username, Password, Role)
+                VALUES ('" . $username . "', '" . $password . "', '" . $role . "')";
+
+        return $connection->query($sql);
+    }
+
+
+    function signin($connection, $username, $password)
+    {
+        $username = $connection->real_escape_string($username);
         $password = $connection->real_escape_string($password);
 
-        $sql = "SELECT * FROM users WHERE name = '".$name."' AND password = '".$password."'";
-        $result = $connection->query($sql);
-        return $result;
-    }
-    function signup($connection, $name, $password)
-    {
-        $name = $connection->real_escape_string($name);
-        $password = $connection->real_escape_string($password);
+        $sql = "SELECT * FROM users
+                WHERE Username = '" . $username . "'
+                AND Password = '" . $password . "'";
 
-        $sql = "INSERT INTO users (name, password) VALUES ('".$name."', '".$password."')";
-        $result = $connection->query($sql);
-        return $result;
+        return $connection->query($sql);
     }
+
+
+    function usernameExists($connection, $username)
+    {
+        $username = $connection->real_escape_string($username);
+
+        $sql = "SELECT * FROM users WHERE Username = '" . $username . "'";
+
+        $result = $connection->query($sql);
+
+        return $result->num_rows > 0;
+    }
+
 
 }
 

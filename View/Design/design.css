@@ -851,3 +851,195 @@ footer hr{
     }
 
 }
+
+
+/*==================================================
+                AUTH TOGGLE PAGE
+==================================================*/
+
+.auth-toggle-container{
+    width:420px;
+    max-width:90%;
+    margin:60px auto;
+    background:white;
+    padding:40px;
+    border:1px solid lightgray;
+    border-top:5px solid var(--jersey-gold);
+    border-radius:4px;
+}
+
+.auth-tabs{
+    display:flex;
+    margin-bottom:25px;
+    border-bottom:2px solid #eee;
+}
+
+.tab-btn{
+    flex:1;
+    padding:12px;
+    background:none;
+    border:none;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    color:#888;
+    border-bottom:3px solid transparent;
+}
+
+.tab-btn.active{
+    color:var(--pitch-green);
+    border-bottom:3px solid var(--jersey-gold);
+}
+
+.auth-form label{
+    display:block;
+    text-align:left;
+    font-weight:bold;
+    margin-bottom:5px;
+}
+
+.auth-form input[type="text"],
+.auth-form input[type="password"]{
+    width:100%;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:4px;
+    font-size:15px;
+}
+
+.auth-form .add-cart-btn{
+    width:100%;
+}
+
+.auth-form.hidden{
+    display:none;
+}
+
+.auth-error{
+    background:#ffe6e6;
+    color:#c00;
+    padding:10px;
+    border-radius:4px;
+    margin-bottom:20px;
+    font-size:14px;
+    text-align:center;
+}
+
+
+/*==================================================
+                ADMIN DASHBOARD
+==================================================*/
+
+.admin-container{
+    width:85%;
+    margin:40px auto;
+}
+
+.admin-container h2{
+    text-align:left;
+}
+
+.admin-menu{
+    display:flex;
+    gap:30px;
+    flex-wrap:wrap;
+    margin-top:20px;
+}
+
+.admin-menu-card{
+    flex:1;
+    min-width:220px;
+    background:white;
+    padding:30px;
+    text-align:center;
+    text-decoration:none;
+    border:1px solid lightgray;
+    border-top:4px solid var(--pitch-green);
+    border-radius:4px;
+    color:#111;
+    transition:.2s;
+}
+
+.admin-menu-card:hover{
+    box-shadow:0 6px 16px rgba(0,0,0,.12);
+    transform:translateY(-4px);
+}
+
+.admin-menu-card h3{
+    color:var(--pitch-green);
+    margin-bottom:10px;
+}
+
+.admin-form{
+    background:white;
+    padding:25px;
+    border:1px solid lightgray;
+    border-radius:4px;
+    max-width:500px;
+    margin-bottom:30px;
+}
+
+.admin-form label{
+    font-weight:bold;
+}
+
+.admin-form input[type="text"],
+.admin-form input[type="number"]{
+    width:100%;
+    padding:8px;
+    border:1px solid #ccc;
+    border-radius:4px;
+}
+
+.cancel-link{
+    margin-left:15px;
+    color:#888;
+    text-decoration:none;
+}
+
+.admin-table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+    margin-top:15px;
+}
+
+.admin-table th,
+.admin-table td{
+    padding:10px 14px;
+    border:1px solid #ddd;
+    text-align:left;
+}
+
+.admin-table th{
+    background:var(--pitch-green);
+    color:white;
+}
+
+.admin-table tr:nth-child(even){
+    background:#f7f7f7;
+}
+
+.admin-table a{
+    color:var(--pitch-green);
+    font-weight:bold;
+    text-decoration:none;
+}
+
+.admin-table a:hover{
+    color:var(--jersey-gold);
+}
+
+.order-detail-box{
+    background:white;
+    padding:25px;
+    border:1px solid lightgray;
+    border-top:5px solid var(--jersey-gold);
+    border-radius:4px;
+    margin-bottom:25px;
+}
+
+.order-detail-box p{
+    margin-bottom:10px;
+    font-size:16px;
+}

@@ -1,92 +1,150 @@
 <?php
+
 require_once __DIR__ . "/../Models/database.php";
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$name = "";
-$password = "";
-$message = "";
-$remember = false;
 
-if(isset($_COOKIE["remember_user"]))
+class loginvalidation
 {
-    $name = $_COOKIE["remember_user"];
-}
 
-if($_SERVER["REQUEST_METHOD"] == "POST")
-{
-    $name = trim($_POST["name"] ?? "");
-    $password = trim($_POST["password"] ?? "");
+    private $db;
 
-    $remember = isset($_POST["remember"]) && $_POST["remember"] == "1";
 
-    $valid = true;
-
-    if(empty($name))
+    public function __construct()
     {
-        $valid = false;
+        $this->db = new db();
     }
 
-    if(empty($password))
+
+    /*=========================
+            SHOW LOGIN
+    =========================*/
+
+    public function showLogin()
     {
-        $valid = false;
+        $activeTab = "login";
+
+        require __DIR__ . "/../View/Auth/index.php";
     }
 
-    if($valid)
+
+    /*=========================
+              LOGIN
+    =========================*/
+
+    public function login()
     {
-        $jsonfile = "../Model/user.json";
+        $name     = trim($_POST["name"] ?? "");
+        $password = trim($_POST["password"] ?? "");
 
-        $login_success = false;
+        $remember = isset($_POST["remember"]) && $_POST["remember"] == "1";
 
-        if(file_exists($jsonfile))
+        $valid = true;
+
+        if (empty($name))
         {
-            $jsonData = file_get_contents($jsonfile);
-            $users = json_decode($jsonData, true) ?? [];
+            $valid = false;
+        }
 
-            foreach($users as $user)
+        if (empty($password))
+        {
+            $valid = false;
+        }
+
+        if (!$valid)
+        {
+            $message   = "Please enter name and password.";
+            $activeTab = "login";
+
+            require __DIR__ . "/../View/Auth/index.php";
+
+            return;
+        }
+
+
+        /*
+        ==========================================
+              REAL DATABASE LOGIN
+        ==========================================
+        */
+
+        $connection = $this->db->connection();
+
+        $result = $this->db->signin($connection, $name, $password);
+
+        if ($result && $result->num_rows > 0)
+        {
+            $row = $result->fetch_assoc();
+
+            $_SESSION["login"]    = true;
+            $_SESSION["username"] = $row["Username"];
+
+            if ($row["Role"] == "Admin")
             {
-                if($user["name"] == $name && $user["password"] == $password)
-                {
-                    $login_success = true;
-
-                    $_SESSION["login"] = true;
-                    $_SESSION["username"] = $user["username"];
-
-                    $message = "Login successful! Welcome, " . $user["username"] . "!";
-
-                    if($remember)
-                    {
-                        setcookie(
-                            "remember_user",
-                            $name,
-                            time() + 60*60*24*7,
-                            "/"
-                        );
-                    }
-                    else
-                    {
-                        setcookie(
-                            "remember_user",
-                            "",
-                            time() - 3600,
-                            "/"
-                        );
-                    }
-
-                    break;
-                }
+                $_SESSION["user_type"] = "admin";
+            }
+            elseif ($row["Role"] == "DeliveryMan")
+            {
+                $_SESSION["user_type"] = "deliveryman";
+            }
+            else
+            {
+                $_SESSION["user_type"] = "customer";
             }
 
-            if(!$login_success)
+            if ($remember)
             {
-                $message = "Invalid name or password!";
+                setcookie("remember_user", $name, time() + 60 * 60 * 24 * 7, "/");
             }
+            else
+            {
+                setcookie("remember_user", "", time() - 3600, "/");
+            }
+
+            if ($_SESSION["user_type"] == "admin")
+            {
+                header("Location: index.php?page=admin-dashboard");
+            }
+            elseif ($_SESSION["user_type"] == "deliveryman")
+            {
+                header("Location: index.php?page=delivery-dashboard");
+            }
+            else
+            {
+                header("Location: index.php");
+            }
+
+            exit();
         }
         else
         {
-            $message = "User file not found!";
+            $message   = "Invalid name or password!";
+            $activeTab = "login";
+
+            require __DIR__ . "/../View/Auth/index.php";
         }
     }
+
+
+    /*=========================
+              LOGOUT
+    =========================*/
+
+    public function logout()
+    {
+        $_SESSION = array();
+
+        session_destroy();
+
+        setcookie("remember_user", "", time() - 3600, "/");
+
+        header("Location: index.php?page=login");
+        exit();
+    }
+
 }
+
 ?>
