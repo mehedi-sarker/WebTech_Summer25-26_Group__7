@@ -7,6 +7,7 @@
     <title>Login / Sign Up - Golazo Kits BD</title>
 
     <link rel="stylesheet" href="View/Design/design.css">
+    <script src="JS/usernameExists.js"></script>
 
 </head>
 
@@ -82,7 +83,8 @@
 
             <label>Username</label>
             <br>
-            <input type="text" name="name" required>
+            <input type="text" name="name" id="name" onkeyup="CheckUser()" required>
+            <span id="userresponse"></span>
             <br><br>
 
             <label>Password</label>
