@@ -25,10 +25,7 @@ class db
     }
 
 
-    /* ==================================================
-                AUTH (works for customers or staff)
-    ================================================== */
-  
+   
 
     /* ==================================================
                         PRODUCTS
@@ -158,7 +155,89 @@ class db
         $result = $connection->query($sql);
         return $result;
     }
+        function getAllOrders($connection)
+        {
+            $sql = "SELECT * FROM orders ORDER BY OrderID DESC";
 
+            return $connection->query($sql);
+        }
+        function getOrderById($connection, $orderId)
+{
+    $orderId = intval($orderId);
+
+    $sql = "SELECT * FROM orders WHERE OrderID = " . $orderId;
+
+    return $connection->query($sql);
+}
+
+
+function getOrderItems($connection, $orderId)
+{
+    $orderId = intval($orderId);
+
+    $sql = "SELECT orderitems.*, Products.ProductName, Products.Image
+            FROM orderitems
+            JOIN Products ON orderitems.ProductID = Products.ProductID
+            WHERE orderitems.OrderID = " . $orderId;
+
+    return $connection->query($sql);
+}
+
+
+function addProduct($connection, $data)
+{
+    $name     = $connection->real_escape_string($data['ProductName']);
+    $club     = $connection->real_escape_string($data['Club']);
+    $edition  = $connection->real_escape_string($data['Edition']);
+    $category = $connection->real_escape_string($data['Category']);
+    $image    = $connection->real_escape_string($data['Image']);
+
+    $price = intval($data['Price']);
+    $stock = intval($data['Stock']);
+
+    $sql = "INSERT INTO Products
+            (ProductName, Club, Edition, Category, Price, Stock, Image)
+            VALUES
+            ('" . $name . "', '" . $club . "', '" . $edition . "', '" . $category . "', '" . $price . "', '" . $stock . "', '" . $image . "')";
+
+    return $connection->query($sql);
+}
+
+
+function updateProduct($connection, $id, $data)
+{
+    $id       = intval($id);
+    $name     = $connection->real_escape_string($data['ProductName']);
+    $club     = $connection->real_escape_string($data['Club']);
+    $edition  = $connection->real_escape_string($data['Edition']);
+    $category = $connection->real_escape_string($data['Category']);
+    $image    = $connection->real_escape_string($data['Image']);
+
+    $price = intval($data['Price']);
+    $stock = intval($data['Stock']);
+
+    $sql = "UPDATE Products SET
+            ProductName = '" . $name . "',
+            Club = '" . $club . "',
+            Edition = '" . $edition . "',
+            Category = '" . $category . "',
+            Price = '" . $price . "',
+            Stock = '" . $stock . "',
+            Image = '" . $image . "'
+            WHERE ProductID = " . $id;
+
+    return $connection->query($sql);
+}
+
+
+function deleteProduct($connection, $id)
+{
+    $id = intval($id);
+
+    $sql = "DELETE FROM Products WHERE ProductID = " . $id;
+
+    return $connection->query($sql);
+}
     function signup($connection, $username, $password, $role)
     {
         $username = $connection->real_escape_string($username);
