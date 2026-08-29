@@ -155,6 +155,7 @@ class db
         $result = $connection->query($sql);
         return $result;
     }
+    
         function getAllOrders($connection)
         {
             $sql = "SELECT * FROM orders ORDER BY OrderID DESC";
@@ -266,12 +267,8 @@ function deleteProduct($connection, $id)
 
     function usernameExists($connection, $username)
     {
-        $username = $connection->real_escape_string($username);
-
-        $sql = "SELECT * FROM users WHERE Username = '" . $username . "'";
-
+        $sql = "SELECT * FROM users WHERE Username = '".$username."'";
         $result = $connection->query($sql);
-
         return $result->num_rows > 0;
     }
 
