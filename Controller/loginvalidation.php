@@ -10,15 +10,6 @@ if (session_status() === PHP_SESSION_NONE) {
 class loginvalidation
 {
 
-    private $db;
-
-
-    public function __construct()
-    {
-        $this->db = new db();
-    }
-
-
     /*=========================
             SHOW LOGIN
     =========================*/
@@ -39,24 +30,25 @@ class loginvalidation
     {
         $name     = trim($_POST["name"] ?? "");
         $password = trim($_POST["password"] ?? "");
-
         $remember = isset($_POST["remember"]) && $_POST["remember"] == "1";
 
-        $valid = true;
+        $message = "";
+        $valid   = true;
 
-        if (empty($name))
+        if (empty($name) || strlen($name) < 5)
         {
+            $message .= "Username must be at least 5 characters. ";
             $valid = false;
         }
 
-        if (empty($password))
+        if (empty($password) || strlen($password) < 5)
         {
+            $message .= "Password must be at least 5 characters.";
             $valid = false;
         }
 
         if (!$valid)
         {
-            $message   = "Please enter name and password.";
             $activeTab = "login";
 
             require __DIR__ . "/../View/Auth/index.php";
@@ -64,16 +56,10 @@ class loginvalidation
             return;
         }
 
+        $database   = new db();
+        $connection = $database->connection();
 
-        /*
-        ==========================================
-              REAL DATABASE LOGIN
-        ==========================================
-        */
-
-        $connection = $this->db->connection();
-
-        $result = $this->db->signin($connection, $name, $password);
+        $result = $database->signin($connection, "users", $name, $password);
 
         if ($result && $result->num_rows > 0)
         {

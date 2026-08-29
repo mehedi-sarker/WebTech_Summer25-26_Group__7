@@ -20,21 +20,13 @@
 
     <div class="auth-tabs">
 
-        <button
-            type="button"
-            class="tab-btn <?php echo ($activeTab == 'login') ? 'active' : ''; ?>"
-            onclick="showTab('login')"
-        >
+        <a href="index.php?page=login" class="tab-btn <?php echo ($activeTab == 'login') ? 'active' : ''; ?>" style="text-decoration:none;">
             Login
-        </button>
+        </a>
 
-        <button
-            type="button"
-            class="tab-btn <?php echo ($activeTab == 'signup') ? 'active' : ''; ?>"
-            onclick="showTab('signup')"
-        >
+        <a href="index.php?page=signup" class="tab-btn <?php echo ($activeTab == 'signup') ? 'active' : ''; ?>" style="text-decoration:none;">
             Sign Up
-        </button>
+        </a>
 
     </div>
 
@@ -48,7 +40,9 @@
 
     <!--============ LOGIN FORM ============-->
 
-    <div id="loginForm" class="auth-form <?php echo ($activeTab == 'login') ? '' : 'hidden'; ?>">
+<?php if ($activeTab == 'login'): ?>
+
+    <div id="loginForm" class="auth-form">
 
         <form method="POST" action="index.php?page=login">
 
@@ -74,10 +68,14 @@
 
     </div>
 
+<?php endif; ?>
+
 
     <!--============ SIGNUP FORM ============-->
 
-    <div id="signupForm" class="auth-form <?php echo ($activeTab == 'signup') ? '' : 'hidden'; ?>">
+<?php if ($activeTab == 'signup'): ?>
+
+    <div id="signupForm" class="auth-form">
 
         <form method="POST" action="index.php?page=signup">
 
@@ -103,39 +101,10 @@
 
     </div>
 
+<?php endif; ?>
+
 
 </div>
-
-
-<script>
-
-function showTab(tab)
-{
-    var loginForm  = document.getElementById("loginForm");
-    var signupForm = document.getElementById("signupForm");
-
-    var loginTab  = document.querySelector('.tab-btn:nth-child(1)');
-    var signupTab = document.querySelector('.tab-btn:nth-child(2)');
-
-    if (tab == "login")
-    {
-        loginForm.classList.remove("hidden");
-        signupForm.classList.add("hidden");
-
-        loginTab.classList.add("active");
-        signupTab.classList.remove("active");
-    }
-    else
-    {
-        signupForm.classList.remove("hidden");
-        loginForm.classList.add("hidden");
-
-        signupTab.classList.add("active");
-        loginTab.classList.remove("active");
-    }
-}
-
-</script>
 
 
 <?php include __DIR__ . "/../layout/footer.php"; ?>

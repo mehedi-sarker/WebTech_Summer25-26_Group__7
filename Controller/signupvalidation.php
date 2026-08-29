@@ -10,15 +10,6 @@ if (session_status() === PHP_SESSION_NONE) {
 class signupvalidation
 {
 
-    private $db;
-
-
-    public function __construct()
-    {
-        $this->db = new db();
-    }
-
-
     /*=========================
             SHOW SIGNUP
     =========================*/
@@ -41,26 +32,29 @@ class signupvalidation
         $password         = trim($_POST["password"] ?? "");
         $confirm_password = trim($_POST["confirm_password"] ?? "");
 
-        $valid = true;
+        $message = "";
+        $valid   = true;
 
-        if (empty($name))
+        if (empty($name) || strlen($name) < 5)
         {
+            $message .= "Username must be at least 5 characters. ";
             $valid = false;
         }
 
-        if (empty($password) || strlen($password) < 8)
+        if (empty($password) || strlen($password) < 5)
         {
+            $message .= "Password must be at least 5 characters. ";
             $valid = false;
         }
 
         if (empty($confirm_password) || $confirm_password !== $password)
         {
+            $message .= "Passwords do not match.";
             $valid = false;
         }
 
         if (!$valid)
         {
-            $message   = "Please fill every field correctly (password needs 8+ characters, and must match).";
             $activeTab = "signup";
 
             require __DIR__ . "/../View/Auth/index.php";
@@ -68,16 +62,10 @@ class signupvalidation
             return;
         }
 
+        $database   = new db();
+        $connection = $database->connection();
 
-        /*
-        ==========================================
-              REAL DATABASE SIGNUP (role = Customer)
-        ==========================================
-        */
-
-        $connection = $this->db->connection();
-
-        if ($this->db->usernameExists($connection, $name))
+        if ($database->usernameExists($connection, "users", $name))
         {
             $message   = "That username is already taken.";
             $activeTab = "signup";
@@ -87,7 +75,7 @@ class signupvalidation
             return;
         }
 
-        $result = $this->db->signup($connection, $name, $password, "Customer");
+        $result = $database->signup($connection, "users", $name, $password, "Customer");
 
         if ($result)
         {

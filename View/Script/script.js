@@ -1,12 +1,4 @@
-/*==========================================
-            PRODUCT DETAILS
-==========================================*/
 
-// Product price comes from productdetails.php
-// Example:
-// <script>
-// var price = 2200;
-// </script>
 
 var quantity = 1;
 
