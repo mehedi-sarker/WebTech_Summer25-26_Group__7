@@ -65,7 +65,7 @@ class signupvalidation
         $database   = new db();
         $connection = $database->connection();
 
-        if ($database->usernameExists($connection, "users", $name))
+        if ($database->usernameExists($connection, $name))
         {
             $message   = "That username is already taken.";
             $activeTab = "signup";
@@ -75,7 +75,7 @@ class signupvalidation
             return;
         }
 
-        $result = $database->signup($connection, "users", $name, $password, "Customer");
+        $result = $database->signup($connection, $name, $password, "Customer");
 
         if ($result)
         {
