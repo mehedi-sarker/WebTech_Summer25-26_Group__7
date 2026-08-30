@@ -272,6 +272,12 @@ function deleteProduct($connection, $id)
         return $result->num_rows > 0;
     }
 
+    function changePassword($connection, $username, $newPassword)
+    {
+        $sql = "UPDATE users SET Password = '".$newPassword."' WHERE Username = '".$username."'";
+        return $connection->query($sql);
+    }
+
 
 }
 
