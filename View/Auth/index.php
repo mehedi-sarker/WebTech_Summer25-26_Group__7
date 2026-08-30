@@ -63,7 +63,8 @@
             <br><br>
 
             <input type="submit" name="login" value="Login" class="add-cart-btn">
-
+            <br><br>
+            <a href="index.php?page=reset-password">Forgot Password? Reset here</a>
         </form>
 
     </div>

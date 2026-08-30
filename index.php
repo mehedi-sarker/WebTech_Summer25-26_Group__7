@@ -116,6 +116,13 @@ switch ($page)
         }
 
         break;
+    /* ---------- RESET PASSWORD ---------- */
+
+    case 'reset-password':
+
+        require "View/Auth/resetPassword.php";
+
+        break;
 
 
     /* ---------- SIGNUP ---------- */
