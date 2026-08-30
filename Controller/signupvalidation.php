@@ -32,29 +32,26 @@ class signupvalidation
         $password         = trim($_POST["password"] ?? "");
         $confirm_password = trim($_POST["confirm_password"] ?? "");
 
-        $message = "";
-        $valid   = true;
+        $valid = true;
 
-        if (empty($name) || strlen($name) < 5)
+        if (empty($name))
         {
-            $message .= "Username must be at least 5 characters. ";
             $valid = false;
         }
 
-        if (empty($password) || strlen($password) < 5)
+        if (empty($password) || strlen($password) < 8)
         {
-            $message .= "Password must be at least 5 characters. ";
             $valid = false;
         }
 
         if (empty($confirm_password) || $confirm_password !== $password)
         {
-            $message .= "Passwords do not match.";
             $valid = false;
         }
 
         if (!$valid)
         {
+            $message   = "Please fill every field correctly (password needs 8+ characters, and must match).";
             $activeTab = "signup";
 
             require __DIR__ . "/../View/Auth/index.php";
@@ -65,7 +62,7 @@ class signupvalidation
         $database   = new db();
         $connection = $database->connection();
 
-        if ($database->usernameExists($connection, "users", $name))
+        if ($database->usernameExists($connection, $name))
         {
             $message   = "That username is already taken.";
             $activeTab = "signup";
@@ -75,7 +72,7 @@ class signupvalidation
             return;
         }
 
-        $result = $database->signup($connection, "users", $name, $password, "Customer");
+        $result = $database->signup($connection, $name, $password, "Customer");
 
         if ($result)
         {

@@ -28,27 +28,35 @@ class loginvalidation
 
     public function login()
     {
-        $name     = trim($_POST["name"] ?? "");
+
+        $name = trim($_POST["name"] ?? "");
+
         $password = trim($_POST["password"] ?? "");
-        $remember = isset($_POST["remember"]) && $_POST["remember"] == "1";
 
-        $message = "";
-        $valid   = true;
+        $remember = isset($_POST["remember"]) &&
+                    $_POST["remember"] == "1";
 
-        if (empty($name) || strlen($name) < 5)
+
+        $valid = true;
+
+
+        if (empty($name))
         {
-            $message .= "Username must be at least 5 characters. ";
             $valid = false;
         }
 
-        if (empty($password) || strlen($password) < 5)
+
+        if (empty($password))
         {
-            $message .= "Password must be at least 5 characters.";
             $valid = false;
         }
+
 
         if (!$valid)
         {
+
+            $message = "Please enter name and password.";
+
             $activeTab = "login";
 
             require __DIR__ . "/../View/Auth/index.php";
@@ -56,62 +64,139 @@ class loginvalidation
             return;
         }
 
-        $database   = new db();
+
+        /*=========================
+              DATABASE LOGIN
+        =========================*/
+
+        $database = new db();
+
         $connection = $database->connection();
 
-        $result = $database->signin($connection, "users", $name, $password);
+
+        $result = $database->signin(
+            $connection,
+            $name,
+            $password
+        );
+
+
+        /*=========================
+          CHECK LOGIN RESULT
+        =========================*/
 
         if ($result && $result->num_rows > 0)
         {
+
             $row = $result->fetch_assoc();
 
-            $_SESSION["login"]    = true;
+
+            $_SESSION["login"] = true;
+
             $_SESSION["username"] = $row["Username"];
+
+
+            /*=========================
+                  CHECK USER ROLE
+            =========================*/
 
             if ($row["Role"] == "Admin")
             {
                 $_SESSION["user_type"] = "admin";
             }
+
             elseif ($row["Role"] == "DeliveryMan")
             {
                 $_SESSION["user_type"] = "deliveryman";
             }
+
             else
             {
                 $_SESSION["user_type"] = "customer";
             }
 
+
+            /*=========================
+                REMEMBER ME
+            =========================*/
+
             if ($remember)
             {
-                setcookie("remember_user", $name, time() + 60 * 60 * 24 * 7, "/");
+
+                setcookie(
+                    "remember_user",
+                    $name,
+                    time() + 60 * 60 * 24 * 7,
+                    "/"
+                );
+
             }
+
             else
             {
-                setcookie("remember_user", "", time() - 3600, "/");
+
+                setcookie(
+                    "remember_user",
+                    "",
+                    time() - 3600,
+                    "/"
+                );
+
             }
+
+
+            /*=========================
+                  REDIRECT BY ROLE
+            =========================*/
 
             if ($_SESSION["user_type"] == "admin")
             {
-                header("Location: index.php?page=admin-dashboard");
-            }
-            elseif ($_SESSION["user_type"] == "deliveryman")
-            {
-                header("Location: index.php?page=delivery-dashboard");
-            }
-            else
-            {
-                header("Location: index.php");
+
+                header(
+                    "Location: index.php?page=admin-dashboard"
+                );
+
             }
 
+            elseif ($_SESSION["user_type"] == "deliveryman")
+            {
+
+                header(
+                    "Location: index.php?page=delivery-dashboard"
+                );
+
+            }
+
+            else
+            {
+
+                header(
+                    "Location: index.php"
+                );
+
+            }
+
+
             exit();
+
         }
+
+
+        /*=========================
+              LOGIN FAILED
+        =========================*/
+
         else
         {
-            $message   = "Invalid name or password!";
+
+            $message = "Invalid name or password!";
+
             $activeTab = "login";
 
             require __DIR__ . "/../View/Auth/index.php";
+
         }
+
     }
 
 
@@ -121,14 +206,26 @@ class loginvalidation
 
     public function logout()
     {
+
         $_SESSION = array();
 
         session_destroy();
 
-        setcookie("remember_user", "", time() - 3600, "/");
 
-        header("Location: index.php?page=login");
+        setcookie(
+            "remember_user",
+            "",
+            time() - 3600,
+            "/"
+        );
+
+
+        header(
+            "Location: index.php?page=login"
+        );
+
         exit();
+
     }
 
 }
