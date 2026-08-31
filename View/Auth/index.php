@@ -8,7 +8,81 @@
 
     <link rel="stylesheet" href="View/Design/design.css">
     <script src="JS/usernameExists.js"></script>
+<script>
 
+function validateLogin()
+{
+    let name = document.getElementsByName("name")[0].value.trim();
+    let password = document.getElementsByName("password")[0].value.trim();
+
+    let valid = true;
+    let message = "";
+
+    if(name.length < 5)
+    {
+        message += "User Name Should be 5 Char\n";
+        valid = false;
+    }
+
+    if(password.length < 5)
+    {
+        message += "Password Must be 5 Char";
+        valid = false;
+    }
+
+    if(!valid)
+    {
+        alert(message);
+    }
+
+    return valid;
+}
+
+
+function validateSignup()
+{
+    let name = document.getElementById("name").value.trim();
+
+    let password = document.getElementsByName("password")[0].value.trim();
+
+    let confirm_password = document.getElementsByName("confirm_password")[0].value.trim();
+
+    let valid = true;
+    let message = "";
+
+    if(name.length < 5)
+    {
+        message += "User Name Should be 5 Char\n";
+        valid = false;
+    }
+
+    if(password.length < 5)
+    {
+        message += "Password Must be 5 Char\n";
+        valid = false;
+    }
+
+    if(confirm_password.length < 5)
+    {
+        message += "Confirm Password Must be 5 Char\n";
+        valid = false;
+    }
+
+    if(password != confirm_password)
+    {
+        message += "Password and Confirm Password Must be Same";
+        valid = false;
+    }
+
+    if(!valid)
+    {
+        alert(message);
+    }
+
+    return valid;
+}
+
+</script>
 </head>
 
 <body>
@@ -44,7 +118,7 @@
 
     <div id="loginForm" class="auth-form">
 
-        <form method="POST" action="index.php?page=login">
+        <form method="POST" action="index.php?page=login" onsubmit="return validateLogin();">
 
             <label>Username</label>
             <br>
@@ -78,7 +152,7 @@
 
     <div id="signupForm" class="auth-form">
 
-        <form method="POST" action="index.php?page=signup">
+        <form method="POST" action="index.php?page=signup" onsubmit="return validateSignup()">
 
             <label>Username</label>
             <br>
